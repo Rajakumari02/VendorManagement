@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+  <span>Training Request Management System</span>
+  <span class="spacer"></span>
+  <mat-icon>school</mat-icon>
+</mat-toolbar>
+
+<div class="role-container">
+  <h2>Select User Role</h2>
+
+  <div class="role-selector">
+    <mat-radio-group [(ngModel)]="selectedRole" (change)="onRoleChange($event)">
+      <mat-radio-button value="ld">L&D Team</mat-radio-button>
+      <mat-radio-button value="vendor">Vendor</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div *ngIf="selectedRole === 'vendor'" class="vendor-dropdown">
+    <mat-form-field appearance="outline">
+      <mat-label>Select Vendor</mat-label>
+      <mat-select [(ngModel)]="selectedVendor" (selectionChange)="onVendorSelect($event)">
+        <mat-option *ngFor="let v of vendors" [value]="v.id">{{ v.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="proceed()" [disabled]="!selectedRole">
+    Proceed
+  </button>
+</div>
+
+<!-- Navigation Tabs -->
+<div *ngIf="selectedRole === 'ld'" class="ld-dashboard">
+  <mat-tab-group>
+    <mat-tab label="Vendor Management">
+      <app-vendor-management></app-vendor-management>
+    </mat-tab>
+    <mat-tab label="Training Requests">
+      <app-training-request-management></app-training-request-management>
+    </mat-tab>
+    <mat-tab label="Trainer Profiles">
+      <app-trainer-profile-management></app-trainer-profile-management>
+    </mat-tab>
+    <mat-tab label="Trainer History">
+      <app-trainer-history></app-trainer-history>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div *ngIf="selectedRole === 'vendor'" class="vendor-dashboard">
+  <app-vendor-portal [vendorId]="selectedVendor"></app-vendor-portal>
+</div>
